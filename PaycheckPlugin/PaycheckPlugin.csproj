@@ -78,6 +78,7 @@
     <Compile Include="Serialization\PaycheckPluginConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialization\Paycheck.cs" />
+    <Compile Include="Serialization\PaycheckXPCap.cs" />
     <Compile Include="Serialization\PaycheckZone.cs" />
   </ItemGroup>
   <ItemGroup />

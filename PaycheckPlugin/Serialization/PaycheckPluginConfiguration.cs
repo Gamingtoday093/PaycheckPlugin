@@ -15,6 +15,7 @@ namespace PhaserArray.PaycheckPlugin.Serialization
 		public float MinimumMovementBetweenPaychecks;
 		public List<Paycheck> Paychecks;
 		public List<PaycheckZone> PaycheckZones;
+		public PaycheckXPCap[] PaycheckXPCapModifiers;
 
 		[XmlIgnore]
 		public bool IsDirty = false;
@@ -45,9 +46,19 @@ namespace PhaserArray.PaycheckPlugin.Serialization
 				new Paycheck("col", 2200),
 				new Paycheck("bg", 2700)
 			};
+			
 			PaycheckZones = new List<PaycheckZone>
 			{
 				new PaycheckZone(" HQ", 270f, 0.5f)
+			};
+
+			PaycheckXPCapModifiers = new PaycheckXPCap[]
+			{
+				new PaycheckXPCap(60_000, 0.9f),
+				new PaycheckXPCap(70_000, 0.75f),
+				new PaycheckXPCap(80_000, 0.60f),
+				new PaycheckXPCap(90_000, 0.25f),
+				new PaycheckXPCap(100_000, 0f),
 			};
 		}
 	}

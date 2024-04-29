@@ -20,7 +20,7 @@ namespace PhaserArray.PaycheckPlugin
     {
 	    public static PaycheckPlugin Instance;
 	    public static PaycheckPluginConfiguration Config;
-		public const string Version = "v1.3";
+		public const string Version = "v1.4";
 
 	    private float _nextPaycheck;
 	    private Dictionary<CSteamID, Vector3> _playerPositions;
@@ -110,14 +110,24 @@ namespace PhaserArray.PaycheckPlugin
 
 			var experience = GetPaycheckExperienceSum(paychecks);
 		    var multiplier = GetPaycheckMultiplier(player.Position, paychecks);
-			
+			float capMultiplier = Config.PaycheckXPCapModifiers.OrderBy(c => c.MinimumXP).LastOrDefault(c => c.MinimumXP < player.Experience)?.Modifier ?? 1f;
+
+			if (capMultiplier == 0f)
+            {
+				ShowNotification(player, Translate("paycheck_notgiven_cap", experience), Color.yellow);
+				return;
+			}
+
 			if (Mathf.Abs(multiplier) > 0.0001f)
 			{
-				var change = (int) (experience * multiplier);
+				var change = (int) (experience * multiplier * capMultiplier);
 				var experienceGiven = ExperienceHelper.ChangeExperience(player, change);
 				if (experienceGiven != 0)
 				{
-					ShowNotification(player, Translate("paycheck_given", experienceGiven), Color.green);
+					if (capMultiplier < 1f)
+						ShowNotification(player, Translate("paycheck_given_cap", experienceGiven, (capMultiplier * 100)), Color.green);
+					else
+						ShowNotification(player, Translate("paycheck_given", experienceGiven), Color.green);
 				}
 				else if (change != 0)
 				{
@@ -239,7 +249,9 @@ namespace PhaserArray.PaycheckPlugin
 	    {
 		    {"paycheck_zero_multiplier", "You cannot earn experience in this area!"},
 		    {"paycheck_given", "You have received your paycheck of {0} experience!"},
+		    {"paycheck_given_cap", "You have received your paycheck of {0} experience! Modified by {1}% because you have too much experience"},
 		    {"paycheck_notgiven", "Your paycheck was {0}, but you were unable to receive it!"},
+		    {"paycheck_notgiven_cap", "Your paycheck was {0}, but you were unable to receive it because you have too much experience! Spend some!"},
 		    {"paycheck_dead", "You cannot receive paychecks while dead!"},
 		    {"paycheck_safezone", "You cannot receive paychecks in a safezone!"},
 		    {"paycheck_stationary", "You cannot receive paychecks if you haven't moved from where you were at the last payout!"},
