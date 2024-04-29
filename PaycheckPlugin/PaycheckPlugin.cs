@@ -212,12 +212,11 @@ namespace PhaserArray.PaycheckPlugin
 				}
 				else if (zone.Node != null)
 			    {
-				    foreach (var node in LevelNodes.nodes)
+				    foreach (var node in LocationDevkitNodeSystem.Get().GetAllNodes())
 				    {
-					    if (node.type != ENodeType.LOCATION) continue;
-					    if (!((LocationNode) node).name.Contains(zone.Node)) continue;
+					    if (!node.name.Contains(zone.Node)) continue;
 
-					    var distance = (position - node.point).sqrMagnitude;
+					    var distance = (position - node.transform.position).sqrMagnitude;
 					    if (!(distance <= Mathf.Pow(zone.Radius, 2f))) continue;
 
 						if (Config.AllowMultipleMultipliers)

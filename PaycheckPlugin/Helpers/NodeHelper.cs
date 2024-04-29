@@ -7,7 +7,7 @@ namespace PhaserArray.PaycheckPlugin.Helpers
 	{
 		public static bool Exists(string search)
 		{
-			return LevelNodes.nodes.Where(node => node.type == ENodeType.LOCATION).Any(node => ((LocationNode)node).name.Contains(search));
+			return LocationDevkitNodeSystem.Get().GetAllNodes().Any(node => node.name.Contains(search));
 		}
 	}
 }
